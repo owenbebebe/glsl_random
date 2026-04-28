@@ -3,39 +3,37 @@ precision mediump float;
 #endif
 
 uniform vec2 u_resolution;
-uniform vec2 u_mouse;
 uniform float u_time;
 
 float random (vec2 st) {
-    return fract(sin(dot(st.xy,
-                         vec2(12.9898,78.233)))*
-        43758.5453123);
+    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
 }
 
 void main() {
-
     const float FREQUENCY = 200.0;
-    const float SPEED = 20.;
+    const float SPEED = 20.0;
+    
+    // Set your 'n' here! Try changing this to 5.0, 10.0, or 50.0
+    const float ROWS = 100.0; 
 
-    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    vec2 st = gl_FragCoord.xy / u_resolution.xy;
+    float rowId = floor(st.y * ROWS);
+
+    // Random direction
+    float dir = random(vec2(rowId, 0.0)) > 0.5 ? 1.0 : -1.0;
+
+    // Alternating direction
+    // mod(rowId, 2.0) returns 0.0 for even rows and 1.0 for odd rows.
+    // By doing math on it, we can map those to -1.0 and 1.0 to reverse the speed.
+    // float dir = sign(mod(rowId, 2.0) - 0.5);
 
     st.x *= FREQUENCY;
-    
-    // top part of the barcode
-    float topSt = st.x + u_time * SPEED;
-    vec2 ipos = vec2(floor(topSt)); 
-    float topMask = step(0.5, st.y);
+    float shiftedX = st.x + (u_time * SPEED * dir);
+
+    vec2 ipos = vec2(floor(shiftedX), rowId); 
+
     float pct = random(ipos);
-    float topBarcode = step(0.5, pct) * topMask;
+    float finalBarcode = step(0.5, pct);
 
-    // bottom part of the barcode
-    float botSt = st.x - u_time * SPEED; // move in the opposite direction
-    ipos = vec2(floor(botSt)); // integer position for the bottom part
-    float botMask = step(0.5, 1.0 - st.y);
-    pct = random(ipos + vec2(100.0)); // different random value for the bottom part
-    float botBarcode = step(0.5,pct) * botMask;
-
-    float finalBarcode = topBarcode + botBarcode;
-
-    gl_FragColor = vec4(vec3(finalBarcode),1.0);
+    gl_FragColor = vec4(vec3(finalBarcode), 1.0);
 }
