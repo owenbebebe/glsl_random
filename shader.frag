@@ -13,10 +13,15 @@ float random (vec2 st) {
 }
 
 void main() {
+
+    const float FREQUENCY = 200.0;
+    const float SPEED = 20.;
+
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
 
-    st.x *= 100.0; // Scale the coordinate system by 10
-    vec2 ipos = vec2(floor(st.x), 0.);  // get the integer coords
+    st.x *= FREQUENCY;
+    st.x += SPEED * u_time;
+    vec2 ipos = vec2(floor(st.x), 0.); 
     
     // Assign a random value based on the integer coord
     float pct = random(ipos);
