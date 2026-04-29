@@ -14,7 +14,8 @@ void main() {
 
     // Constants
     const float FREQUENCY = 200.0;
-    const float SPEED = 20.0;
+    const float MIN_SPEED = 10.0;
+    const float MAX_SPEED = 30.0;
     const float ROWS = 100.0; 
 
     // Normalize pixel coordinates (from 0 to 1)
@@ -33,11 +34,15 @@ void main() {
     // float dir = sign(mod(rowId, 2.0) - 0.5);
 
     // apply mouse hover
-    float isNotHovered = step(0.5, abs(rowId - mouseRowId));
-    dir *= isNotHovered;
+    float isNotHovered = step(0.5, abs(rowId - mouseRowId)); 
+    dir = isNotHovered == 1.0 ? dir : dir*-1.0;
+
+    // apply random speed
+    float randomSpeed = random(vec2(rowId, 456.));
+    float rowSpeed = mix(MIN_SPEED, MAX_SPEED, randomSpeed);
 
     st.x *= FREQUENCY;
-    float shiftedX = st.x + (u_time * SPEED * dir);
+    float shiftedX = st.x + (u_time * rowSpeed * dir);
 
     vec2 ipos = vec2(floor(shiftedX), rowId); 
 
