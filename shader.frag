@@ -20,14 +20,19 @@ void main() {
     const float FREQUENCY = 200.0;
     const float MIN_SPEED = 10.0;
     const float MAX_SPEED = 30.0;
-    const float ROWS = 100.0; 
+    
+    // --- DYNAMIC ROWS LOGIC ---
+    float rowChangeTimer = floor(u_time); // Adding a non-linear component to make it less predictable
+
+    float randomRowCount = random(rowChangeTimer);
+    float dynamicRows = floor(mix(2.0, 100.0, randomRowCount));
 
     // Normalize pixel coordinates (from 0 to 1)
     vec2 st = gl_FragCoord.xy / u_resolution.xy;
     vec2 mouse = u_mouse.xy / u_resolution.xy;
-    float rowId = floor(st.y * ROWS);
-
-    float mouseRowId = floor(mouse.y * ROWS);
+    
+    float rowId = floor(st.y * dynamicRows);
+    float mouseRowId = floor(mouse.y * dynamicRows);
 
     // Random direction
     float dir = random(vec2(rowId, 0.0)) > 0.5 ? 1.0 : -1.0;
@@ -39,15 +44,12 @@ void main() {
     // apply random speed
     float randomSpeed = random(vec2(rowId, 456.));
     float rowSpeed = mix(MIN_SPEED, MAX_SPEED, randomSpeed);
-
-    // apply random frequency
     float randomFrequency = random(vec2(rowId, 789.));
     float rowFrequency = mix(FREQUENCY * 0.5, FREQUENCY * 1.5, randomFrequency);
     
     st.x *= rowFrequency;
 
     // --- GLITCH TIME INJECTION ---
-
     float globalFreq = random(floor(u_time)) + abs(atan(u_time) * 0.1);
     
     float glitchTime = 60.0 + u_time * (1.0 - globalFreq);
