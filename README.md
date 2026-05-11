@@ -6,9 +6,16 @@
 
 ## 01 — Randomness
 
+You can access the website [here](https://owenbebebe.github.io/glsl_random/)*
+
+<img width="544" height="306" alt="radom_week1" src="https://github.com/user-attachments/assets/8d8d42f8-2d7e-4fa2-950d-ebe3f54f7496" />
+
 *Inspired by audio-visual artist [Ryoji Ikeda](https://www.ryojiikeda.com/)*
 
 This project explores the nature of randomness as both a visual language and a philosophical statement. Drawing from Ikeda's signature aesthetic — high-frequency, data-driven imagery that feels simultaneously mechanical and sublime — the shader generates a field of scrolling binary noise where every attribute is determined by chance.
+
+
+
 
 ### What's random
 
