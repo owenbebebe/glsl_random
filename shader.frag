@@ -25,7 +25,7 @@ void main() {
     float rowChangeTimer = floor(u_time); // Adding a non-linear component to make it less predictable
 
     float randomRowCount = random(rowChangeTimer);
-    float dynamicRows = floor(mix(2.0, 150.0, randomRowCount));
+    float dynamicRows = floor(mix(1.0, 250.0, randomRowCount));
 
     // Normalize pixel coordinates (from 0 to 1)
     vec2 st = gl_FragCoord.xy / u_resolution.xy;
